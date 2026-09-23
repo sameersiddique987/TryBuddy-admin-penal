@@ -4,8 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const API = axios.create({
-  // baseURL: "https://try-buddy-backend-i87j.vercel.app",
-  baseURL: "http://localhost:5000",
+   baseURL: "https://try-buddy-backend-i87j.vercel.app",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
