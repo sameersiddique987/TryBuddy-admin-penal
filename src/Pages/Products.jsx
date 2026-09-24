@@ -288,7 +288,7 @@ function Products() {
 
                   {/* Pricing */}
                   <td className="py-4 px-6">
-                    <p className="text-lg font-extrabold text-gray-900">₹{item.price}</p>
+                    <p className="text-lg font-extrabold text-gray-900">Rs {item.price}</p>
                     <p className="text-[10px] text-green-500 font-bold uppercase">Incl. Taxes</p>
                   </td>
 

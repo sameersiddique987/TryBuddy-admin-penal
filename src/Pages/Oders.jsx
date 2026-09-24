@@ -135,7 +135,7 @@ function Orders() {
 
                   {/* Total Amount */}
                   <td className="py-5 px-6">
-                    <span className="text-lg font-black text-slate-900 tracking-tighter">₹{order.totalAmount}</span>
+                    <span className="text-lg font-black text-slate-900 tracking-tighter">RS {order.totalAmount}</span>
                   </td>
 
                   {/* Status Badge */}
@@ -191,3 +191,498 @@ function Orders() {
 }
 
 export default Orders;
+
+
+
+
+
+
+
+
+
+// import { useEffect, useState } from "react";
+// import API from "../api/axios";
+// import Swal from "sweetalert2";
+
+// import {
+//   HiOutlineClock,
+//   HiOutlineCheckCircle,
+//   HiOutlineXCircle,
+//   HiOutlineTruck,
+//   HiOutlineMail,
+// } from "react-icons/hi";
+
+// function Orders() {
+//   const [orders, setOrders] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   // =========================
+//   // GET ALL ORDERS
+//   // =========================
+//   const fetchOrders = async () => {
+//     try {
+//       setLoading(true);
+
+//       const res = await API.get("/api/v1/all");
+
+//       setOrders(res.data.orders || []);
+//     } catch (error) {
+//       console.error("Fetch Orders Error:", error);
+
+//       Swal.fire({
+//         title: "Error",
+//         text: "Failed to fetch orders",
+//         icon: "error",
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // =========================
+//   // UPDATE STATUS
+//   // =========================
+//   const updateStatus = async (orderId, status) => {
+//     try {
+//       console.log("Updating:", {
+//         orderId,
+//         status,
+//       });
+
+//       const res = await API.put("/api/v1/status", {
+//         orderId: orderId,
+//         status: status,
+//       });
+
+//       console.log("Status Response:", res.data);
+
+//       Swal.fire({
+//         title: "Success",
+//         text: `Order status changed to ${status}`,
+//         icon: "success",
+//         timer: 1200,
+//         showConfirmButton: false,
+//       });
+
+//       await fetchOrders();
+
+//     } catch (error) {
+//       console.error("Update Status Error:", error);
+
+//       console.error(
+//         "Backend Error:",
+//         error.response?.data
+//       );
+
+//       Swal.fire({
+//         title: "Status Update Failed",
+//         text:
+//           error.response?.data?.message ||
+//           error.response?.data?.error ||
+//           "Failed to update order status",
+//         icon: "error",
+//       });
+//     }
+//   };
+
+//   // =========================
+//   // FETCH ON PAGE LOAD
+//   // =========================
+//   useEffect(() => {
+//     fetchOrders();
+//   }, []);
+
+//   // =========================
+//   // STATUS COLORS
+//   // =========================
+//   const getStatusStyle = (status) => {
+//     const currentStatus = status?.toLowerCase();
+
+//     if (currentStatus === "pending") {
+//       return "bg-yellow-100 text-yellow-700 border-yellow-200";
+//     }
+
+//     if (currentStatus === "shipped") {
+//       return "bg-blue-100 text-blue-700 border-blue-200";
+//     }
+
+//     if (currentStatus === "completed") {
+//       return "bg-green-100 text-green-700 border-green-200";
+//     }
+
+//     if (currentStatus === "cancelled") {
+//       return "bg-red-100 text-red-700 border-red-200";
+//     }
+
+//     return "bg-gray-100 text-gray-700 border-gray-200";
+//   };
+
+//   return (
+//     <div className="p-5 pt-24 md:pt-5 bg-gray-100 min-h-screen">
+
+//       {/* =========================
+//           HEADER
+//       ========================= */}
+//       <div className="mb-8 flex justify-between items-end">
+
+//         <div>
+//           <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+//             Order Management
+//           </h2>
+
+//           <p className="text-slate-500 font-medium">
+//             Track and process your TryBuddy customer orders.
+//           </p>
+//         </div>
+
+//         <button
+//           type="button"
+//           onClick={fetchOrders}
+//           className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all"
+//         >
+//           Refresh List
+//         </button>
+
+//       </div>
+
+//       {/* =========================
+//           TABLE
+//       ========================= */}
+//       <div className="bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 border border-slate-100 overflow-hidden">
+
+//         <div className="overflow-x-auto">
+
+//           <table className="w-full text-left border-collapse">
+
+//             {/* TABLE HEADER */}
+//             <thead>
+
+//               <tr className="bg-slate-50 border-b border-slate-100">
+
+//                 <th className="py-5 px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+//                   Order Info
+//                 </th>
+
+//                 <th className="py-5 px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+//                   Items Detail
+//                 </th>
+
+//                 <th className="py-5 px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+//                   Revenue
+//                 </th>
+
+//                 <th className="py-5 px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+//                   Current Status
+//                 </th>
+
+//                 <th className="py-5 px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+//                   Actions
+//                 </th>
+
+//               </tr>
+
+//             </thead>
+
+//             {/* TABLE BODY */}
+//             <tbody className="divide-y divide-slate-50">
+
+//               {loading ? (
+
+//                 <tr>
+
+//                   <td
+//                     colSpan="5"
+//                     className="py-20 text-center font-bold text-slate-400"
+//                   >
+//                     Fetching latest orders...
+//                   </td>
+
+//                 </tr>
+
+//               ) : orders.length > 0 ? (
+
+//                 orders.map((order) => (
+
+//                   <tr
+//                     key={order._id}
+//                     className="group hover:bg-blue-50/30 transition-colors"
+//                   >
+
+//                     {/* =========================
+//                         ORDER INFO
+//                     ========================= */}
+//                     <td className="py-5 px-6">
+
+//                       <div className="flex flex-col">
+
+//                         <span className="font-black text-slate-900 text-sm">
+//                           #
+//                           {order._id
+//                             ? order._id.slice(-6).toUpperCase()
+//                             : "N/A"}
+//                         </span>
+
+//                         <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+
+//                           <HiOutlineMail className="text-blue-400" />
+
+//                           {order.email || "No Email"}
+
+//                         </span>
+
+//                         <span className="text-[10px] text-slate-400 mt-1 font-bold">
+
+//                           {order.createdAt
+//                             ? new Date(
+//                                 order.createdAt
+//                               ).toLocaleDateString("en-GB", {
+//                                 day: "2-digit",
+//                                 month: "short",
+//                                 year: "numeric",
+//                               })
+//                             : "N/A"}
+
+//                         </span>
+
+//                       </div>
+
+//                     </td>
+
+//                     {/* =========================
+//                         ITEMS
+//                     ========================= */}
+//                     <td className="py-5 px-6">
+
+//                       <div className="max-w-[250px]">
+
+//                         {order.products?.length > 0 ? (
+
+//                           order.products.map(
+//                             (product, index) => (
+
+//                               <p
+//                                 key={index}
+//                                 className="text-xs text-slate-700 font-bold truncate mb-1"
+//                               >
+//                                 •{" "}
+//                                 {product.title ||
+//                                   product.name ||
+//                                   "Product"}
+
+//                                 {product.size && (
+//                                   <span className="text-blue-500 italic">
+//                                     {" "}
+//                                     ({product.size})
+//                                   </span>
+//                                 )}
+
+//                                 {" "}x
+//                                 {product.quantity || 1}
+
+//                               </p>
+
+//                             )
+//                           )
+
+//                         ) : (
+
+//                           <span className="text-xs text-slate-400">
+//                             No products
+//                           </span>
+
+//                         )}
+
+//                       </div>
+
+//                     </td>
+
+//                     {/* =========================
+//                         REVENUE
+//                     ========================= */}
+//                     <td className="py-5 px-6">
+
+//                       <span className="text-lg font-black text-slate-900">
+//                         Rs{" "}
+//                         {Number(
+//                           order.totalAmount || 0
+//                         ).toLocaleString()}
+//                       </span>
+
+//                     </td>
+
+//                     {/* =========================
+//                         STATUS
+//                     ========================= */}
+//                     <td className="py-5 px-6">
+
+//                       <span
+//                         className={
+//                           "px-4 py-1.5 rounded-full text-[10px] font-black uppercase border-2 " +
+//                           getStatusStyle(order.status)
+//                         }
+//                       >
+//                         {order.status || "Unknown"}
+//                       </span>
+
+//                     </td>
+
+//                     {/* =========================
+//                         ACTIONS
+//                     ========================= */}
+//                     <td className="py-5 px-6 min-w-[260px]">
+
+//                       <div
+//                         className="
+//                           flex
+//                           items-center
+//                           justify-center
+//                           gap-2
+//                           min-w-max
+//                           invisible
+//                           opacity-0
+//                           group-hover:visible
+//                           group-hover:opacity-100
+//                           transition-all
+//                           duration-200
+//                         "
+//                       >
+
+//                         {/* PENDING */}
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             updateStatus(
+//                               order._id,
+//                               "pending"
+//                             )
+//                           }
+//                           className="
+//                             p-2.5
+//                             bg-yellow-50
+//                             text-yellow-600
+//                             rounded-xl
+//                             hover:bg-yellow-500
+//                             hover:text-white
+//                             transition-all
+//                           "
+//                           title="Pending"
+//                         >
+//                           <HiOutlineClock size={20} />
+//                         </button>
+
+//                         {/* SHIPPED */}
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             updateStatus(
+//                               order._id,
+//                               "shipped"
+//                             )
+//                           }
+//                           className="
+//                             p-2.5
+//                             bg-blue-50
+//                             text-blue-600
+//                             rounded-xl
+//                             hover:bg-blue-600
+//                             hover:text-white
+//                             transition-all
+//                           "
+//                           title="Shipped"
+//                         >
+//                           <HiOutlineTruck size={20} />
+//                         </button>
+
+//                         {/* COMPLETED */}
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             updateStatus(
+//                               order._id,
+//                               "completed"
+//                             )
+//                           }
+//                           className="
+//                             p-2.5
+//                             bg-green-50
+//                             text-green-600
+//                             rounded-xl
+//                             hover:bg-green-600
+//                             hover:text-white
+//                             transition-all
+//                           "
+//                           title="Completed"
+//                         >
+//                           <HiOutlineCheckCircle size={20} />
+//                         </button>
+
+//                         {/* CANCELLED */}
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             updateStatus(
+//                               order._id,
+//                               "cancelled"
+//                             )
+//                           }
+//                           className="
+//                             p-2.5
+//                             bg-red-50
+//                             text-red-600
+//                             rounded-xl
+//                             hover:bg-red-600
+//                             hover:text-white
+//                             transition-all
+//                           "
+//                           title="Cancelled"
+//                         >
+//                           <HiOutlineXCircle size={20} />
+//                         </button>
+
+//                       </div>
+
+//                     </td>
+
+//                   </tr>
+
+//                 ))
+
+//               ) : (
+
+//                 <tr>
+
+//                   <td
+//                     colSpan="5"
+//                     className="py-20 text-center"
+//                   >
+//                     <div className="flex flex-col items-center">
+
+//                       <HiOutlineClock
+//                         size={45}
+//                         className="text-slate-300 mb-3"
+//                       />
+
+//                       <p className="text-slate-400 font-bold">
+//                         No Orders Found
+//                       </p>
+
+//                     </div>
+//                   </td>
+
+//                 </tr>
+
+//               )}
+
+//             </tbody>
+
+//           </table>
+
+//         </div>
+
+//       </div>
+
+//     </div>
+//   );
+// }
+
+// export default Orders;

@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import 'swiper/css';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import AddCard from './Pages/AddCard.jsx';
 import Dashboard from './Pages/Dashboard.jsx';
@@ -17,58 +17,63 @@ import Help from './Pages/Help.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, 
+    element: <Layout />,
     children: [
       {
         index: true,
-        element: <Login />
-      },
-      {
-        path: "Login",
-        element: <Login />
+        element: <Login />,
       },
 
       {
-        element: <ProtectedRoute />, 
+        path: "Login",
+        element: <Login />,
+      },
+
+      // 🔐 Protected Routes
+      {
+        element: <ProtectedRoute />,
         children: [
           {
             path: "Dashboard",
-            element: <Dashboard />
+            element: <Dashboard />,
           },
           {
             path: "AddCard",
-            element: <AddCard />
+            element: <AddCard />,
           },
           {
             path: "Products",
-            element: <Products />
+            element: <Products />,
           },
           {
             path: "EditProduct/:id",
-            element: <EditProduct />
+            element: <EditProduct />,
           },
           {
             path: "Orders",
-            element: <Orders />
+            element: <Orders />,
           },
           {
             path: "Setting",
-            element: <Settings />
+            element: <Settings />,
           },
-           {
+          {
             path: "Help",
-            element: <Help />
-          }
-        ]
+            element: <Help />,
+          },
+        ],
       },
 
-      // 404 Page
       {
         path: "*",
-        element: <h1 className="text-center mt-20 text-3xl font-bold">NOT FOUND</h1>
-      }
-    ]
-  }
+        element: (
+          <h1 className="text-center mt-20 text-3xl font-bold">
+            NOT FOUND
+          </h1>
+        ),
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(
